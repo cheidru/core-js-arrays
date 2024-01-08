@@ -275,8 +275,16 @@ function distinct(arr) {
  *    createNDimensionalArray(4, 2) => [[[[0, 0], [0, 0]], [[0, 0], [0, 0]]], [[[0, 0], [0, 0]], [[0, 0], [0, 0]]]]
  *    createNDimensionalArray(1, 1) => [0]
  */
-function createNDimensionalArray(/* n, size */) {
-  throw new Error('Not implemented');
+function createNDimensionalArray(n, size) {
+  const tmp = new Array(n).fill(0);
+  let chunk = new Array(size);
+  const lastChunk = new Array(size).fill(0);
+  tmp.map((res, i) => {
+    if (i === 0) chunk = lastChunk;
+    if (i > 0) chunk = new Array(size).fill(chunk);
+    return res;
+  });
+  return chunk;
 }
 
 /**
@@ -340,8 +348,21 @@ function calculateBalance(arr) {
  *    createChunks(['a', 'b', 'c', 'd', 'e'], 2) => [['a', 'b'], ['c', 'd'], ['e']]
  *    createChunks([10, 20, 30, 40, 50], 1) => [[10], [20], [30], [40], [50]]
  */
-function createChunks(/* arr, chunkSize */) {
-  throw new Error('Not implemented');
+function createChunks(arr, chunkSize) {
+  const result = [];
+  let tmp = [];
+  let counter = 0;
+  arr.map((item, index) => {
+    tmp.push(item);
+    counter += 1;
+    if (counter === chunkSize || index === arr.length - 1) {
+      result.push(tmp);
+      tmp = [];
+      counter = 0;
+    }
+    return item;
+  });
+  return result;
 }
 
 /**
@@ -382,8 +403,9 @@ function generateOdds(len) {
  *   getElementByIndices(['one','two','three'], [2]) => 'three'  (arr[2])
  *   getElementByIndices([[[ 1, 2, 3]]], [ 0, 0, 1 ]) => 2        (arr[0][0][1])
  */
-function getElementByIndices(/* arr, indices */) {
-  throw new Error('Not implemented');
+function getElementByIndices(arr, indices) {
+  const result = Number(indices.join(''));
+  return arr.flat(Infinity)[result];
 }
 
 /**
@@ -547,8 +569,15 @@ function findLongestIncreasingSubsequence(nums) {
  *  propagateItemsByPositionIndex([ 'a', 'b', 'c', null ]) => [ 'a', 'b', 'b', 'c', 'c', 'c',  null, null, null, null ]
  *  propagateItemsByPositionIndex([ 1,2,3,4,5 ]) => [ 1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5 ]
  */
-function propagateItemsByPositionIndex(/* arr */) {
-  throw new Error('Not implemented');
+function propagateItemsByPositionIndex(arr) {
+  if (arr.length === 0) return [];
+  const result = [];
+  arr.map((item, index) => {
+    const tmp = new Array(index + 1).fill(item);
+    tmp.map((i) => result.push(i));
+    return item;
+  });
+  return result;
 }
 
 /**
@@ -564,8 +593,14 @@ function propagateItemsByPositionIndex(/* arr */) {
  *    shiftArray(['a', 'b', 'c', 'd'], -1) => ['b', 'c', 'd', 'a']
  *    shiftArray([10, 20, 30, 40, 50], -3) => [40, 50, 10, 20, 30]
  */
-function shiftArray(/* arr, n */) {
-  throw new Error('Not implemented');
+function shiftArray(arr, n) {
+  if (arr.length === 0) return [];
+  if (n > 0) {
+    const tmp = arr.splice(-n, n);
+    return tmp.concat(arr);
+  }
+  const tmp = arr.splice(0, -n);
+  return arr.concat(tmp);
 }
 
 /**
@@ -581,8 +616,21 @@ function shiftArray(/* arr, n */) {
  *   sortDigitNamesByNumericOrder([ 'nine','eight','nine','eight' ]) => [ 'eight','eight','nine','nine']
  *   sortDigitNamesByNumericOrder([ 'one','one','one','zero' ]) => [ 'zero','one','one','one' ]
  */
-function sortDigitNamesByNumericOrder(/* arr */) {
-  throw new Error('Not implemented');
+function sortDigitNamesByNumericOrder(arr) {
+  if (arr.length === 0) return [];
+  const result = [
+    'zero',
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
+  ];
+  return arr.sort((a, b) => result.indexOf(a) - result.indexOf(b));
 }
 
 /**
@@ -604,8 +652,13 @@ function sortDigitNamesByNumericOrder(/* arr */) {
  *   swapHeadAndTail([]) => []
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  if (arr.length === 0) return [];
+  if (arr.length === 1) return arr;
+  const chunkLen = Math.floor(arr.length / 2);
+  const tmp1 = arr.splice(0, chunkLen);
+  const tmp2 = arr.splice(-chunkLen, chunkLen);
+  return [...tmp2, ...arr, ...tmp1];
 }
 
 module.exports = {
